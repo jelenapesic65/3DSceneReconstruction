@@ -133,7 +133,6 @@ SplaTAM does not support only RGB frames as input; it requires depth frames as w
 ## Future works 
 
 Building on the adapted SLAM pipeline presented in the SplaTAM work, future efforts could focus on improving occlusion handling, inspired by techniques used in the 3DGS SSR framework. Current occlusions are detected with the Segment Anything Model (SAM), which could be replaced with more efficient approaches, such as sparse optical flow or frame differencing. No changes would be made to the format of the provided data (segmented frames + depth frames), but there is room for improvement in the depth estimation, such as using LiDAR-rendered depth or a similar approach.
----
 
 ## Acknowledgements
 
