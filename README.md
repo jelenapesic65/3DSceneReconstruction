@@ -4,7 +4,7 @@
 
 ## Project overview
 
-This project bundles three 3D Scene reconstruction algorithm repositorie.Each algorithm is provided as a cloned repository and has a small set of `.py` files that you will replace with updated versions. All algorithms use the **same video file** as input. You also have three Jupyter notebooks (one per method) that make running each algorithm on the video easy.
+This project bundles three 3D Scene reconstruction algorithm repositories. Each algorithm is provided as a cloned repository and has a small set of `.py` files that you will replace with updated versions. All algorithms use the **same video file** as input. There are three separate Jupyter notebooks (one per method) that make running each algorithm on the video easy.
 
 This README explains folder layout, how to replace files, how to run the notebooks, dependency suggestions, and troubleshooting tips.
 
@@ -21,7 +21,7 @@ project-root/
 │       ├── nerfcapture.py
 │       ├── dataset2config.py
 │       └── config.py
-├── notebooks/
+├── scripts/
 │   ├── 3DGS/         #pip install gsplat/ wheel build
 │   ├── 3DGS SSR/      # git clone https://github.com/ThinkXca/3DGS.git --recursive
 │   ├── SplaTAM/       # git clone https://github.com/spla-tam/SplaTAM.git
@@ -54,7 +54,7 @@ Notes:
 ## How to prepare (one-time)
 
 1. Create project root and subfolders as above.
-2. Clone each repository inside `notebooks/`
+2. Clone each repository inside `scripts/`
 3. Put the video file in `project-root/data/video.mp4` (rename if needed and update the notebooks accordingly).
 4. Replace modified `.py` files 
 
@@ -94,8 +94,9 @@ Each notebook is responsible for invoking its corresponding algorithm. Recommend
 
 1. Set the project root and add the cloned repo to `sys.path` if necessary.
 2. Confirm `data/video.mp4` exists.
-3a. Prepare COLMAP processed data and upload as in example data structure 
-3b. Upload video, segment the video into RGB frames and run `LoadSplaTAMData.py` to create depth files (structure as in example).  
+3. For using data different than provided, the steps to integrate them in the pipeline are following: <br>
+3a. Prepare COLMAP processed data and upload as in example data structure - gSplat, 3DGS SSR <br>
+3b. Upload video, segment the video into RGB frames and run `LoadSplaTAMData.py` to create depth files (structure as in example).  - SplaTAM
 4. Run cells sequentially
 5. Outputs will be saved as specified in the original repositories.
 
@@ -105,36 +106,35 @@ Each notebook is responsible for invoking its corresponding algorithm. Recommend
 
 ## Python environment & dependencies
 
-All dependencies and enviroments are set for each separate algorithm/notebook. By sequentially running the cells a `requirements.txt` installs the dependencies. Additional packages can be installed if needed.
+All dependencies and environments are set for each separate algorithm/notebook. By sequentially running the cells, `requirements.txt` installs the dependencies. Additional needed packages are installed.
 ```bash 
 pip install -r requirements.txt
 ```
 
+## Changes to SplaTAM pipeline
 
+SplaTAM does not support only RGB frames as input; it requires depth frames as well. This is realized by using a MiDAS monocular model to estimate the depth of each frame. The closest pipeline already existing for SplaTAM utilizes the RGB-D format directly from an iPhone. In the `replace_files`, are the files needed to run any video. 
+- Process the video in frames
+- Estimate depth with `LoadSplaTAMData.py`
+- Run the frames through COLMAP structure to get the calibration parameters
+- Update fx,fy,cx,cy in config file 
 
 
 ## Troubleshooting tips
 
-* "Module not found" errors: ensure `sys.path` points to the cloned repo or install the repo as a local package with `pip install -e cloned_repos/algorithm_A`.
+* "Module not found" errors: ensure `sys.path` points to the cloned repo or install the repo as a local package with `pip install -e cloned_repos/algorithm`.
 * Dependency conflicts: use isolated virtual environments per algorithm if necessary (or Docker).
 * Video not found: notebooks assert the path at start — check `data/video.mp4` and the filename.
-* If a replaced file requires additional helper files, ensure you include them in `replace_files/<algorithm>/` and copy them as well.
+* Follow additional instructions in each notebook script
 
 
 ---
 
-## Next steps
+## Future works 
 
-* generate a ready-to-run `apply_replacements.sh` with the exact file paths if you give me the repository names and the list of files to replace; or
-* produce a `requirements.txt` tailored to the three repos if you paste their `requirements.txt` files or list dependencies
-
-
+Building on the adapted SLAM pipeline presented in the SplaTAM work, future efforts could focus on improving occlusion handling, inspired by techniques used in the 3DGS SSR framework. Current occlusions are detected with the Segment Anything Model (SAM), which could be replaced with more efficient approaches, such as sparse optical flow or frame differencing. No changes would be made to the format of the provided data (segmented frames + depth frames), but there is room for improvement in the depth estimation, such as using LiDAR-rendered depth or a similar approach.
 ---
 
-## License
+## Acknowledgements
 
-Choose an appropriate license for your project (e.g., MIT). Add a `LICENSE` file if you want me to include one.
-
----
-
-*End of README*
+This repository is built on works provided by [https://github.com/nerfstudio-project/gsplat](gSplat),[https://github.com/ThinkXca/3DGS/tree/main](3D Gaussian Street Scene Reconstruction) and [https://github.com/spla-tam/SplaTAM/tree/main](SplaTAM)
