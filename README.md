@@ -136,4 +136,4 @@ Building on the adapted SLAM pipeline presented in the SplaTAM work, future effo
 
 ## Acknowledgements
 
-This repository is built on works provided by [https://github.com/nerfstudio-project/gsplat](gSplat),[https://github.com/ThinkXca/3DGS/tree/main](3D Gaussian Street Scene Reconstruction) and [https://github.com/spla-tam/SplaTAM/tree/main](SplaTAM)
+This repository is built on works provided by [https://github.com/nerfstudio-project/gsplat](gSplat),[https://github.com/ThinkXca/3DGS/tree/main](3DGS_SSR) and [https://github.com/spla-tam/SplaTAM/tree/main ](SplaTAM)
